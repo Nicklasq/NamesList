@@ -1,15 +1,42 @@
+import org.w3c.dom.NameList;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NamesList {
 
-    private ArrayList<String> names;
+
+    public static void main(String[] args) throws FileNotFoundException{
+        NamesList app = new NamesList();
+
+        PrintStream names = new PrintStream(("names.txt"));
+        app.startUserInterface(app,names);
+        //names.println(app.names);
+
+        String namesPretty = "";
+
+        int counter = 1;
+        for (String name : app.names){
+            names.println(counter+": "+ name+".");
+            counter++;
+        }
+
+
+    }
 
     public NamesList() {
         names = new ArrayList<>();
+        f = new File("names.txt");
     }
 
-    public void startUserInterface() {
+     ArrayList<String> names;
+        File f;
+
+
+
+    public void startUserInterface(NamesList app, PrintStream names) {
         System.out.println("""
                 Welcome to the NamesList - enterprise edition.
                 ----------------------------------------------
@@ -23,7 +50,7 @@ public class NamesList {
             switch (choice) {
                 case 1 -> displayListOfNames();
                 case 2 -> loadListOfNames();
-                case 3 -> saveListOfNames();
+                case 3 -> saveListOfNames(/*app, names*/);
                 case 4 -> enterNames();
                 case 0 -> exit();
                 default -> System.out.println("Unknown command - please use 0-4");
@@ -60,14 +87,24 @@ public class NamesList {
         System.out.println("Done");
     }
 
-    private void saveListOfNames() {
+    private void saveListOfNames(/*NamesList app, PrintStream names*/) {
         // TODO: Implement save of the names list to a file
+        //names.println(app.names);
         System.out.println("NOT IMPLEMENTED");
     }
 
     private void loadListOfNames() {
-        // TODO: Implement load of the names list from a file
-        System.out.println("NOT IMPLEMENTED");
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while(scanner.hasNextLine()){
+            System.out.println(scanner.nextLine());
+        }
+           scanner.close();
+        System.out.println(":");
     }
 
     private void displayListOfNames() {
@@ -92,8 +129,4 @@ public class NamesList {
     }
 
 
-    public static void main(String[] args) {
-        NamesList app = new NamesList();
-        app.startUserInterface();
-    }
 }
